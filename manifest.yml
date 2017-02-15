@@ -1,0 +1,9 @@
+---
+applications:
+  - name: spring-seed-addressbook
+    buildpack: java_buildpack
+    path: target/my-app-0.0.1-SNAPSHOT.jar
+    memory: 128M
+    timeout : 180
+env:
+   SPRING_PROFILES_ACTIVE : cloud
