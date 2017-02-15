@@ -126,9 +126,6 @@ public class ComplexQuery {
     }
 
     public String UPDATE() {
-//        UPDATE Customers
-//        SET ContactName='Alfred Schmidt', City='Frankfurt'
-//        WHERE CustomerID=1;
         String query = "UPDATE " + table + " SET ";
         StringBuffer val = new StringBuffer();
         String id = "";
@@ -146,11 +143,15 @@ public class ComplexQuery {
         return query;
     }
 
-    public String DELETE(String id, String table) {
+    public static String COLUMNS(String table) {
+        return "SELECT column_name FROM information_schema.columns WHERE table_name='" + table + "'";
+    }
+
+    public static String DELETE(String id, String table) {
         return "DELETE FROM " + table + " WHERE id=" + id;
     }
 
-    public String queryById(String id) {
+    public static String queryById(String id, String table) {
         return "SELECT * FROM " + table + " WHERE id=" + "\'" + id + "\'";
     }
 
