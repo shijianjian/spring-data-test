@@ -52,6 +52,8 @@ public class EmployeeController {
             keyValuePairs.put(item, "");
         }
 
+        System.out.println("Column request received. Respond with: " + keyValuePairs.toString());
+
         return new ResponseEntity<HashMap<String, String>>(keyValuePairs, HttpStatus.OK);
     }
 
@@ -80,21 +82,23 @@ public class EmployeeController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<HashMap<String, String>>> addEmployee(@RequestBody String addNew){
 
+        System.out.println(addNew);
+
         Columns.init(pa, table);
 
-        Collection<HashMap<String, String>> materials = new HashSet<>();
-
+        Collection<HashMap<String, String>> res = new HashSet<>();
 
         try {
             HashMap<String, String> hashMap = CovertingTool.JSONStringToHashMap(addNew);
             PostgresAccess pa = new PostgresAccess();
             pa.insertMaterial(hashMap, table);
             Columns.init(pa, table);
-            materials = pa.getEmployees("","*", table);
+            res.add(hashMap);
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
-        return new ResponseEntity<Collection<HashMap<String, String>>>(materials, HttpStatus.OK);
+
+        return new ResponseEntity<Collection<HashMap<String, String>>>(res, HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
@@ -128,10 +132,10 @@ public class EmployeeController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(
-            value = "/api/employee/delete",
+            value = "/api/employee/delete/{id}",
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Collection<HashMap<String, String>>> deleteEmployee(@RequestBody String id) {
+    public ResponseEntity<Collection<HashMap<String, String>>> deleteEmployee(@PathVariable String id) {
 
         Collection<HashMap<String, String>> res = new HashSet<HashMap<String, String>>();
 

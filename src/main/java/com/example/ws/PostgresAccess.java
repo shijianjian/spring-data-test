@@ -47,7 +47,7 @@ public class PostgresAccess
   public Collection<String> getColumns(String tableName) {
     Collection<String> res = new HashSet<String>();
 
-    jt.query("SELECT column_name FROM information_schema.columns WHERE table_name='" + tableName + "'",
+    jt.query(ComplexQuery.COLUMNS(tableName),
             (rs, rsNum) -> res.add(rs.getString("column_name").trim()));
 
     return res;
@@ -72,10 +72,10 @@ public class PostgresAccess
   }
 
   public Collection<HashMap<String, String>> getMaterialById(HashMap<String, String> dataMap, String id, String table) {
-      ComplexQuery cq = new ComplexQuery(dataMap, table);
+
       Collection<HashMap<String, String>> set = new HashSet<>();
 
-      jt.query(cq.queryById(id),
+      jt.query(ComplexQuery.queryById(id, table),
               (rs, resNum) -> {
                   HashMap<String, String> res = new HashMap<String, String>();
                   for(String col : Columns.read()) {
@@ -90,8 +90,7 @@ public class PostgresAccess
   }
 
   public void deleteMaterialbyId(String id , String table) {
-          ComplexQuery cq = new ComplexQuery();
-          jt.execute(cq.DELETE(id, table));
+          jt.execute(ComplexQuery.DELETE(id, table));
   }
 
 }
